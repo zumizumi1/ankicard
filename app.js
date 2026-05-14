@@ -114,6 +114,27 @@ function applyCategoryFilter() {
   updateCard();
 }
 
+function splitAnswerAndTrivia(answer, trivia) {
+  const answerText = answer.trim();
+  const firstSentenceEnd = answerText.indexOf("。");
+
+  if (firstSentenceEnd === -1 || firstSentenceEnd === answerText.length - 1) {
+    return {
+      answer: answerText,
+      trivia: trivia.trim(),
+    };
+  }
+
+  const mainAnswer = answerText.slice(0, firstSentenceEnd + 1).trim();
+  const answerTrivia = answerText.slice(firstSentenceEnd + 1).trim();
+  const triviaText = [answerTrivia, trivia.trim()].filter(Boolean).join("\n");
+
+  return {
+    answer: mainAnswer,
+    trivia: triviaText,
+  };
+}
+
 function updateCard() {
   const card = visibleCards[currentIndex];
   elements.flashcard.classList.remove("is-flipped");
@@ -130,12 +151,14 @@ function updateCard() {
     return;
   }
 
+  const displayText = splitAnswerAndTrivia(card.answer, card.trivia);
+
   elements.questionText.textContent = card.question;
-  elements.answerText.textContent = card.answer;
+  elements.answerText.textContent = displayText.answer;
   elements.frontCategory.textContent = card.category;
   elements.backCategory.textContent = card.category;
-  elements.triviaText.textContent = card.trivia;
-  elements.triviaBlock.hidden = !card.trivia;
+  elements.triviaText.textContent = displayText.trivia;
+  elements.triviaBlock.hidden = !displayText.trivia;
   elements.currentNumber.textContent = String(currentIndex + 1);
   elements.totalNumber.textContent = String(visibleCards.length);
   highlightCurrentWord();
