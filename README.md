@@ -1,1 +1,1 @@
-# ankicard
+# ankicard基本情報のアンキカードです
