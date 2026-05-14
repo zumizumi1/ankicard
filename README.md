@@ -5,7 +5,7 @@
 ## 起動
 
 ```bash
-npm start
+python3 -m http.server 3000
 ```
 
 ブラウザで `http://localhost:3000` を開きます。
