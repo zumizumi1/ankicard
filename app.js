@@ -135,6 +135,12 @@ function splitAnswerAndTrivia(answer, trivia) {
   };
 }
 
+function getAnswerLengthClass(answer) {
+  if (answer.length >= 70) return "is-extra-long-answer";
+  if (answer.length >= 42) return "is-long-answer";
+  return "";
+}
+
 function updateCard() {
   const card = visibleCards[currentIndex];
   elements.flashcard.classList.remove("is-flipped");
@@ -155,6 +161,11 @@ function updateCard() {
 
   elements.questionText.textContent = card.question;
   elements.answerText.textContent = displayText.answer;
+  elements.answerText.classList.remove("is-long-answer", "is-extra-long-answer");
+  const answerLengthClass = getAnswerLengthClass(displayText.answer);
+  if (answerLengthClass) {
+    elements.answerText.classList.add(answerLengthClass);
+  }
   elements.frontCategory.textContent = card.category;
   elements.backCategory.textContent = card.category;
   elements.triviaText.textContent = displayText.trivia;
