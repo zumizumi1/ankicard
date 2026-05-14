@@ -13,16 +13,28 @@ const contentTypes = {
 };
 
 function getFilePath(urlPath) {
-  const decodedPath = decodeURIComponent(urlPath.split("?")[0]);
+  let decodedPath = "/";
+
+  try {
+    decodedPath = decodeURIComponent(urlPath.split("?")[0]);
+  } catch {
+    decodedPath = "/";
+  }
+
   const safePath = path.normalize(decodedPath).replace(/^(\.\.[/\\])+/, "");
   const requestedPath = safePath === "/" ? "/index.html" : safePath;
   return path.join(root, requestedPath);
 }
 
-const server = http.createServer((request, response) => {
+function isInsideRoot(filePath) {
+  const relativePath = path.relative(root, filePath);
+  return relativePath === "" || (!relativePath.startsWith("..") && !path.isAbsolute(relativePath));
+}
+
+function handleRequest(request, response) {
   const filePath = getFilePath(request.url || "/");
 
-  if (!filePath.startsWith(root)) {
+  if (!isInsideRoot(filePath)) {
     response.writeHead(403);
     response.end("Forbidden");
     return;
@@ -41,8 +53,14 @@ const server = http.createServer((request, response) => {
     });
     response.end(data);
   });
-});
+}
 
-server.listen(port, () => {
-  console.log(`Ankicard running at http://localhost:${port}`);
-});
+const server = http.createServer(handleRequest);
+
+if (require.main === module) {
+  server.listen(port, () => {
+    console.log(`Ankicard running at http://localhost:${port}`);
+  });
+}
+
+module.exports = handleRequest;

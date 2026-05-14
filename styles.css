@@ -196,7 +196,7 @@ select {
 }
 
 .flashcard-back .card-text {
-  font-size: clamp(1.9rem, 5vw, 4.4rem);
+  font-size: clamp(1.55rem, 4vw, 3.4rem);
 }
 
 .flashcard.is-flipped .flashcard-front {
@@ -250,6 +250,7 @@ select {
   font-size: clamp(1rem, 2.3vw, 1.35rem);
   font-weight: 650;
   line-height: 1.45;
+  white-space: pre-line;
 }
 
 .actions {
