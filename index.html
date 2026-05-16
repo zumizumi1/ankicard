@@ -39,23 +39,6 @@
         role="tabpanel"
         aria-labelledby="study-tab"
       >
-        <header class="topbar">
-          <div>
-            <p class="eyebrow">Random flashcards</p>
-            <h1 id="app-title">単語カード</h1>
-          </div>
-          <div class="counter" aria-live="polite">
-            <span id="current-number">1</span>
-            <span>/</span>
-            <span id="total-number">0</span>
-          </div>
-        </header>
-
-        <div class="study-filter">
-          <label for="category-filter">カテゴリー</label>
-          <select id="category-filter"></select>
-        </div>
-
         <button class="flashcard" id="flashcard" type="button" aria-label="カードを裏返す">
           <span class="flashcard-face flashcard-front">
             <span class="category-badge" id="front-category"></span>
@@ -85,6 +68,23 @@
               <path d="M9 18l6-6-6-6" />
             </svg>
           </button>
+        </div>
+
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Random flashcards</p>
+            <h1 id="app-title">単語カード</h1>
+          </div>
+          <div class="counter" aria-live="polite">
+            <span id="current-number">1</span>
+            <span>/</span>
+            <span id="total-number">0</span>
+          </div>
+        </header>
+
+        <div class="study-filter">
+          <label for="category-filter">カテゴリー</label>
+          <select id="category-filter"></select>
         </div>
 
         <section class="word-preview" aria-labelledby="word-preview-title">
