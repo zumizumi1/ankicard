@@ -26,6 +26,8 @@ const elements = {
   loadCards: document.querySelector("#load-cards"),
   resetSample: document.querySelector("#reset-sample"),
   statusMessage: document.querySelector("#status-message"),
+  tabButtons: document.querySelectorAll("[data-tab-target]"),
+  tabPanels: document.querySelectorAll(".tab-panel"),
 };
 
 let cards = [];
@@ -213,6 +215,20 @@ function showStatus(message) {
   elements.statusMessage.textContent = message;
 }
 
+function switchTab(targetTab) {
+  elements.tabButtons.forEach((button) => {
+    const isActive = button.dataset.tabTarget === targetTab;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-selected", String(isActive));
+  });
+
+  elements.tabPanels.forEach((panel) => {
+    const isActive = panel.id === `${targetTab}-panel`;
+    panel.classList.toggle("is-active", isActive);
+    panel.hidden = !isActive;
+  });
+}
+
 function saveCardsText(rawText) {
   try {
     localStorage.setItem(storageKey, rawText);
@@ -239,6 +255,7 @@ function loadCardsFromInput() {
       ? `${cards.length}枚のカードを作成しました`
       : `${cards.length}枚のカードを作成しました（保存容量超過）`,
   );
+  switchTab("study");
 }
 
 function moveCard(step) {
@@ -279,6 +296,9 @@ elements.prevCard.addEventListener("click", () => moveCard(-1));
 elements.nextCard.addEventListener("click", () => moveCard(1));
 elements.randomCard.addEventListener("click", randomCard);
 elements.loadCards.addEventListener("click", loadCardsFromInput);
+elements.tabButtons.forEach((button) => {
+  button.addEventListener("click", () => switchTab(button.dataset.tabTarget));
+});
 elements.categoryFilter.addEventListener("change", (event) => {
   currentCategory = event.target.value;
   applyCategoryFilter();

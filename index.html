@@ -8,7 +8,37 @@
   </head>
   <body>
     <main class="app-shell">
-      <section class="study-panel" aria-labelledby="app-title">
+      <nav class="mode-tabs" role="tablist" aria-label="画面切り替え">
+        <button
+          class="tab-button is-active"
+          id="study-tab"
+          type="button"
+          role="tab"
+          aria-selected="true"
+          aria-controls="study-panel"
+          data-tab-target="study"
+        >
+          カード表示
+        </button>
+        <button
+          class="tab-button"
+          id="editor-tab"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="editor-panel"
+          data-tab-target="editor"
+        >
+          内容入力
+        </button>
+      </nav>
+
+      <section
+        class="study-panel tab-panel is-active"
+        id="study-panel"
+        role="tabpanel"
+        aria-labelledby="study-tab"
+      >
         <header class="topbar">
           <div>
             <p class="eyebrow">Random flashcards</p>
@@ -66,7 +96,13 @@
         </section>
       </section>
 
-      <section class="editor-panel" aria-labelledby="editor-title">
+      <section
+        class="editor-panel tab-panel"
+        id="editor-panel"
+        role="tabpanel"
+        aria-labelledby="editor-tab"
+        hidden
+      >
         <div class="section-heading">
           <h2 id="editor-title">単語リスト</h2>
           <button class="text-button" id="reset-sample" type="button">サンプルに戻す</button>

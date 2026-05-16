@@ -39,18 +39,61 @@ select {
 }
 
 .app-shell {
-  width: min(1120px, calc(100% - 32px));
+  width: min(860px, calc(100% - 32px));
   min-height: 100vh;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 380px;
-  gap: 24px;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
   padding: 32px 0;
+}
+
+.mode-tabs {
+  width: 100%;
+  padding: 4px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  border: 1px solid rgba(217, 211, 200, 0.9);
+  border-radius: 8px;
+  background: rgba(255, 253, 248, 0.72);
+  box-shadow: 0 12px 32px rgba(30, 41, 59, 0.08);
+}
+
+.tab-button {
+  min-height: 42px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-weight: 800;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.tab-button:hover {
+  border-color: rgba(15, 118, 110, 0.24);
+  color: var(--accent-strong);
+}
+
+.tab-button.is-active {
+  border-color: rgba(15, 118, 110, 0.32);
+  background: #fff;
+  color: var(--accent-strong);
+  box-shadow: 0 8px 20px rgba(30, 41, 59, 0.08);
+}
+
+.tab-panel[hidden] {
+  display: none;
 }
 
 .study-panel,
 .editor-panel {
+  width: 100%;
   background: rgba(255, 253, 248, 0.92);
   border: 1px solid rgba(217, 211, 200, 0.9);
   border-radius: 8px;
@@ -445,8 +488,7 @@ button:focus-visible {
 
 @media (max-width: 860px) {
   .app-shell {
-    grid-template-columns: 1fr;
-    align-items: stretch;
+    justify-content: flex-start;
   }
 
   .flashcard {
