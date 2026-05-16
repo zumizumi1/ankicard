@@ -18,7 +18,7 @@
           aria-controls="study-panel"
           data-tab-target="study"
         >
-          カード表示
+          単語一覧
         </button>
         <button
           class="tab-button"
@@ -39,46 +39,14 @@
         role="tabpanel"
         aria-labelledby="study-tab"
       >
-        <button class="flashcard" id="flashcard" type="button" aria-label="カードを裏返す">
-          <span class="flashcard-face flashcard-front">
-            <span class="category-badge" id="front-category"></span>
-            <span class="face-label">問題</span>
-            <span class="card-text" id="question-text"></span>
-          </span>
-          <span class="flashcard-face flashcard-back">
-            <span class="category-badge" id="back-category"></span>
-            <span class="face-label">答え</span>
-            <span class="card-text" id="answer-text"></span>
-            <span class="trivia-block" id="trivia-block">
-              <span class="trivia-label">豆知識</span>
-              <span class="trivia-text" id="trivia-text"></span>
-            </span>
-          </span>
-        </button>
-
-        <div class="actions" aria-label="学習操作">
-          <button class="icon-button" id="prev-card" type="button" aria-label="前のカード">
-            <svg aria-hidden="true" viewBox="0 0 24 24">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
-          <button class="primary-button" id="random-card" type="button">ランダム出題</button>
-          <button class="icon-button" id="next-card" type="button" aria-label="次のカード">
-            <svg aria-hidden="true" viewBox="0 0 24 24">
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </button>
-        </div>
-
         <header class="topbar">
           <div>
-            <p class="eyebrow">Random flashcards</p>
+            <p class="eyebrow">Word list</p>
             <h1 id="app-title">単語カード</h1>
           </div>
           <div class="counter" aria-live="polite">
-            <span id="current-number">1</span>
-            <span>/</span>
             <span id="total-number">0</span>
+            <span>語</span>
           </div>
         </header>
 

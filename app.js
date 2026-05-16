@@ -7,21 +7,10 @@ question,質問,名詞,動詞では「疑問を持つ」という意味になり
 const storageKey = "flashcard-list-v1";
 
 const elements = {
-  flashcard: document.querySelector("#flashcard"),
-  questionText: document.querySelector("#question-text"),
-  answerText: document.querySelector("#answer-text"),
-  frontCategory: document.querySelector("#front-category"),
-  backCategory: document.querySelector("#back-category"),
-  triviaBlock: document.querySelector("#trivia-block"),
-  triviaText: document.querySelector("#trivia-text"),
-  currentNumber: document.querySelector("#current-number"),
   totalNumber: document.querySelector("#total-number"),
   categoryFilter: document.querySelector("#category-filter"),
   wordList: document.querySelector("#word-list"),
   wordListCount: document.querySelector("#word-list-count"),
-  prevCard: document.querySelector("#prev-card"),
-  nextCard: document.querySelector("#next-card"),
-  randomCard: document.querySelector("#random-card"),
   cardInput: document.querySelector("#card-input"),
   loadCards: document.querySelector("#load-cards"),
   resetSample: document.querySelector("#reset-sample"),
@@ -113,68 +102,7 @@ function applyCategoryFilter() {
       : cards.filter((card) => card.category === currentCategory);
   currentIndex = 0;
   updateWordList();
-  updateCard();
-}
-
-function splitAnswerAndTrivia(answer, trivia) {
-  const answerText = answer.trim();
-  const firstSentenceEnd = answerText.indexOf("。");
-
-  if (firstSentenceEnd === -1 || firstSentenceEnd === answerText.length - 1) {
-    return {
-      answer: answerText,
-      trivia: trivia.trim(),
-    };
-  }
-
-  const mainAnswer = answerText.slice(0, firstSentenceEnd + 1).trim();
-  const answerTrivia = answerText.slice(firstSentenceEnd + 1).trim();
-  const triviaText = [answerTrivia, trivia.trim()].filter(Boolean).join("\n");
-
-  return {
-    answer: mainAnswer,
-    trivia: triviaText,
-  };
-}
-
-function getAnswerLengthClass(answer) {
-  if (answer.length >= 70) return "is-extra-long-answer";
-  if (answer.length >= 42) return "is-long-answer";
-  return "";
-}
-
-function updateCard() {
-  const card = visibleCards[currentIndex];
-  elements.flashcard.classList.remove("is-flipped");
-
-  if (!card) {
-    elements.questionText.textContent = "単語を入力してください";
-    elements.answerText.textContent = "";
-    elements.frontCategory.textContent = "";
-    elements.backCategory.textContent = "";
-    elements.triviaText.textContent = "";
-    elements.triviaBlock.hidden = true;
-    elements.currentNumber.textContent = "0";
-    elements.totalNumber.textContent = "0";
-    return;
-  }
-
-  const displayText = splitAnswerAndTrivia(card.answer, card.trivia);
-
-  elements.questionText.textContent = card.question;
-  elements.answerText.textContent = displayText.answer;
-  elements.answerText.classList.remove("is-long-answer", "is-extra-long-answer");
-  const answerLengthClass = getAnswerLengthClass(displayText.answer);
-  if (answerLengthClass) {
-    elements.answerText.classList.add(answerLengthClass);
-  }
-  elements.frontCategory.textContent = card.category;
-  elements.backCategory.textContent = card.category;
-  elements.triviaText.textContent = displayText.trivia;
-  elements.triviaBlock.hidden = !displayText.trivia;
-  elements.currentNumber.textContent = String(currentIndex + 1);
   elements.totalNumber.textContent = String(visibleCards.length);
-  highlightCurrentWord();
 }
 
 function updateWordList() {
@@ -198,10 +126,12 @@ function updateWordList() {
     button.textContent = card.question;
     button.addEventListener("click", () => {
       currentIndex = index;
-      updateCard();
+      highlightCurrentWord();
     });
     elements.wordList.append(button);
   });
+
+  highlightCurrentWord();
 }
 
 function highlightCurrentWord() {
@@ -258,26 +188,6 @@ function loadCardsFromInput() {
   switchTab("study");
 }
 
-function moveCard(step) {
-  if (visibleCards.length === 0) return;
-  currentIndex = (currentIndex + step + visibleCards.length) % visibleCards.length;
-  updateCard();
-}
-
-function randomCard() {
-  if (visibleCards.length <= 1) {
-    updateCard();
-    return;
-  }
-
-  let nextIndex = currentIndex;
-  while (nextIndex === currentIndex) {
-    nextIndex = Math.floor(Math.random() * visibleCards.length);
-  }
-  currentIndex = nextIndex;
-  updateCard();
-}
-
 function initialize() {
   const savedText = localStorage.getItem(storageKey);
   elements.cardInput.value = savedText || getDefaultCardsText();
@@ -288,13 +198,6 @@ function initialize() {
   showStatus(`${cards.length}枚のカードがあります`);
 }
 
-elements.flashcard.addEventListener("click", () => {
-  elements.flashcard.classList.toggle("is-flipped");
-});
-
-elements.prevCard.addEventListener("click", () => moveCard(-1));
-elements.nextCard.addEventListener("click", () => moveCard(1));
-elements.randomCard.addEventListener("click", randomCard);
 elements.loadCards.addEventListener("click", loadCardsFromInput);
 elements.tabButtons.forEach((button) => {
   button.addEventListener("click", () => switchTab(button.dataset.tabTarget));
@@ -307,19 +210,6 @@ elements.categoryFilter.addEventListener("change", (event) => {
 elements.resetSample.addEventListener("click", () => {
   elements.cardInput.value = getDefaultCardsText();
   loadCardsFromInput();
-});
-
-document.addEventListener("keydown", (event) => {
-  if (event.target === elements.cardInput) return;
-
-  if (event.key === " ") {
-    event.preventDefault();
-    elements.flashcard.classList.toggle("is-flipped");
-  }
-
-  if (event.key === "ArrowLeft") moveCard(-1);
-  if (event.key === "ArrowRight") moveCard(1);
-  if (event.key.toLowerCase() === "r") randomCard();
 });
 
 initialize();
